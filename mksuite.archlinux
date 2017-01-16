@@ -3,7 +3,7 @@
 set -eu
 
 PKGS=(base sudo)
-PUBLISH=/srv/http/noah-blob/archlinux-new.tar.gz
+PUBLISH=/srv/http/noah-blob/archlinux.tar.gz
 
 # install to chroot env
 TARGET=~/archlinux
