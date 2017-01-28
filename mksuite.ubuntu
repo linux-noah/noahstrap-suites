@@ -19,7 +19,7 @@ sudo mkdir $TARGET/proc/self/
 sudo sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
 sudo chmod u-w $TARGET/proc
 sudo ln -fs ../proc/self/mounts $TARGET/etc/mtab
-sudo ln -fs /etc/resolv.conf $TARGET/etc/resolv.conf
+sudo ln -fs /Volumes/Macintosh\ HD/etc/resolv.conf $TARGET/etc/resolv.conf
 sudo ln -fs /tmp $TARGET/tmp
 
 # compress

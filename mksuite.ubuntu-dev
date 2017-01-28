@@ -3,7 +3,7 @@
 set -eu
 
 CODENAME=xenial
-PKGS=gdb,build-essential
+PKGS=gdb,build-essential,man-db,manpages-dev
 PUBLISH=/srv/http/noah-blob/ubuntu-dev.tar.gz
 
 # install to chroot env
@@ -14,13 +14,12 @@ sudo debootstrap --include=$PKGS $CODENAME $TARGET
 
 # fixup
 sudo mkdir $TARGET/Users $TARGET/Volumes
-sudo ln -fs /dev/null $TARGET/dev/null
 sudo chmod u+w $TARGET/proc
 sudo mkdir $TARGET/proc/self/
 sudo sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
 sudo chmod u-w $TARGET/proc
 sudo ln -fs ../proc/self/mounts $TARGET/etc/mtab
-sudo ln -fs /etc/resolv.conf $TARGET/etc/resolv.conf
+sudo ln -fs /Volumes/Macintosh\ HD/etc/resolv.conf $TARGET/etc/resolv.conf
 sudo ln -fs /tmp $TARGET/tmp
 
 # compress
