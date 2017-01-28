@@ -2,15 +2,15 @@
 
 set -eu
 
-CODENAME=xenial
-PKGS=gdb,build-essential,man-db,manpages-dev
-PUBLISH=/srv/http/noah-blob/ubuntu-dev.tar.gz
+PKGS=(base base-devel sudo gdb xorg-xeyes)
+PUBLISH=/srv/http/noah-blob/archlinux-dev.tar.gz
 
 # install to chroot env
-TARGET=~/ubuntu-dev
+TARGET=~/archlinux-dev
+#TARGET=$(mktemp -d)   # pacstrap gets angry saying device is too full
 sudo rm -rf $TARGET
 sudo mkdir $TARGET
-sudo debootstrap --include=$PKGS $CODENAME $TARGET
+sudo pacstrap -i -c -d $TARGET "${PKGS[@]}" --ignore linux
 
 # fixup
 sudo mkdir $TARGET/Users $TARGET/Volumes
@@ -20,7 +20,7 @@ sudo sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
 sudo chmod u-w $TARGET/proc
 sudo ln -fs ../proc/self/mounts $TARGET/etc/mtab
 sudo ln -fs /Volumes/Macintosh\ HD/etc/resolv.conf $TARGET/etc/resolv.conf
-sudo ln -fs /tmp $TARGET/tmp
+sudo ln -Fs /tmp $TARGET/tmp
 
 # compress
 ARCHIVE=$(mktemp --suffix .tar.gz)
