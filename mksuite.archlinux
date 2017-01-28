@@ -2,7 +2,7 @@
 
 set -eu
 
-PKGS=(base sudo)
+PKGS=(base sudo xorg-xeyes)
 PUBLISH=/srv/http/noah-blob/archlinux.tar.gz
 
 # install to chroot env
