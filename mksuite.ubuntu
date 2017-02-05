@@ -7,26 +7,23 @@ PUBLISH=/srv/http/noah-blob/ubuntu.tar.gz
 
 # install to chroot env
 TARGET=~/ubuntu
-sudo rm -rf $TARGET
-sudo mkdir $TARGET
-sudo debootstrap $CODENAME $TARGET
+rm -rf $TARGET
+mkdir $TARGET
+debootstrap $CODENAME $TARGET
 
 # fixup
-sudo mkdir $TARGET/Users $TARGET/Volumes
-sudo ln -fs /dev/null $TARGET/dev/null
-sudo chmod u+w $TARGET/proc
-sudo mkdir $TARGET/proc/self/
-sudo sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
-sudo chmod u-w $TARGET/proc
-sudo ln -fs ../proc/self/mounts $TARGET/etc/mtab
-sudo ln -fs /Volumes/Macintosh\ HD/etc/resolv.conf $TARGET/etc/resolv.conf
-sudo ln -fs /tmp $TARGET/tmp
+mkdir $TARGET/Users $TARGET/Volumes
+chmod u+w $TARGET/proc
+mkdir $TARGET/proc/self/
+sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
+chmod u-w $TARGET/proc
+ln -fs ../proc/self/mounts $TARGET/etc/mtab
 
 # compress
 ARCHIVE=$(mktemp --suffix .tar.gz)
 echo Archive: $ARCHIVE
-sudo tar cfvz $ARCHIVE -C `dirname $TARGET` `basename $TARGET`
-sudo mv $ARCHIVE $PUBLISH
-sudo chown root:root $PUBLISH
-sudo chmod 644 $PUBLISH
-sudo rm -rf $TARGET
+tar cfvz $ARCHIVE -C `dirname $TARGET` `basename $TARGET`
+mv $ARCHIVE $PUBLISH
+chown root:root $PUBLISH
+chmod 644 $PUBLISH
+rm -rf $TARGET
