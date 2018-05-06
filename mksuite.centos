@@ -1,0 +1,34 @@
+#!/bin/bash
+# NB: you have to be root to run this.
+# This uses a Red Hat equivalent of debootstrap, see
+# https://github.com/dozzie/yumbootstrap
+
+set -eu
+
+SUITE=centos-6
+PUBLISH=/srv/http/noah-blob/ubuntu.tar.gz
+
+# install to chroot env
+TARGET=~/$SUITE
+rm -rf $TARGET
+mkdir $TARGET
+/usr/local/sbin/yumbootstrap --verbose \
+     --group=Core \
+     $SUITE $TARGET
+
+# fixup
+mkdir $TARGET/Users $TARGET/Volumes
+chmod u+w $TARGET/proc
+mkdir $TARGET/proc/self/
+sh -c "echo 'none / hfsplus' > $TARGET/proc/self/mounts"
+chmod u-w $TARGET/proc
+ln -fs ../proc/self/mounts $TARGET/etc/mtab
+
+# compress
+ARCHIVE=$(mktemp --suffix .tar.gz)
+echo Archive: $ARCHIVE
+tar cfvz $ARCHIVE -C `dirname $TARGET` `basename $TARGET`
+mv $ARCHIVE $PUBLISH
+chown root:root $PUBLISH
+chmod 644 $PUBLISH
+rm -rf $TARGET
